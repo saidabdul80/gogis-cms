@@ -222,17 +222,9 @@ class InvoiceController extends Controller
 
             // Sync with GIRAS if requested
             if ($validated['sync_with_giras'] ?? true) { // Default to true
-                try {
-                    $this->syncInvoiceWithGiras($invoice, $property, $validated);
-                } catch (Exception $e) {
-                    // Log error but don't fail the invoice creation
-                    Log::error('GIRAS Sync Failed', [
-                        'invoice_id' => $invoice->id,
-                        'error' => $e->getMessage(),
-                        'trace' => $e->getTraceAsString()
-                    ]);
-                    // Continue without GIRAS sync
-                }
+                // This will throw an exception if GIRAS sync fails
+                // The exception will be caught by the outer try-catch and trigger rollback
+                $this->syncInvoiceWithGiras($invoice, $property, $validated);
             }
 
             DB::commit();
@@ -247,7 +239,13 @@ class InvoiceController extends Controller
                 'trace' => $e->getTraceAsString()
             ]);
 
-            return back()->withErrors(['error' => 'Failed to create invoice: ' . $e->getMessage()]);
+            // Check if it's a GIRAS validation error
+            $errorMessage = $e->getMessage();
+            if (str_contains($errorMessage, 'phone number')) {
+                return back()->withInput()->withErrors(['error' => 'GIRAS Validation Error: ' . $errorMessage . ' Please update the customer\'s phone number and try again.']);
+            }
+
+            return back()->withInput()->withErrors(['error' => 'Failed to create invoice: ' . $errorMessage]);
         }
     }
 
@@ -273,12 +271,22 @@ class InvoiceController extends Controller
         // Prepare taxpayer data (unregistered taxpayer)
         $customer = $property->customer;
 
-        // Get phone number - use customer's phone or a default placeholder
+        // Get phone number and validate it
         $phoneNumber = $customer->phone_number ?? '';
-        Log::info('Phone Number: ' . $phoneNumber);
+
+        // Validate phone number format
         if (empty($phoneNumber)) {
-            // GIRAS requires phone number, use a placeholder if not available
-            $phoneNumber = '+2340000000000'; // Placeholder for missing phone numbers
+            throw new Exception('Customer phone number is required for GIRAS invoice creation. Please update the customer profile with a valid phone number.');
+        }
+
+        // Basic phone number validation (Nigerian format)
+        // Remove spaces, dashes, and other non-numeric characters except +
+        $cleanPhone = preg_replace('/[^\d+]/', '', $phoneNumber);
+
+        // Check if it's a valid Nigerian phone number
+        // Should be 11 digits (e.g., 08012345678) or 14 digits with country code (e.g., +2348012345678)
+        if (strlen($cleanPhone) < 11) {
+            throw new Exception('Invalid phone number format. Phone number must be at least 11 digits (e.g., 08012345678 or +2348012345678). Please update the customer profile.');
         }
 
         $taxpayerData = [

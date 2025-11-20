@@ -101,6 +101,21 @@ const submit = () => {
                                         />
                                     </v-col>
 
+                                    <v-col cols="12" md="6">
+                                        <v-text-field
+                                            v-model="form.phone_number"
+                                            label="Phone Number *"
+                                            type="tel"
+                                            placeholder="e.g., 08012345678 or +2348012345678"
+                                            hint="Required for GIRAS invoice creation"
+                                            persistent-hint
+                                            :rules="[
+                                                (v: string) => !!v || 'Phone number is required',
+                                                (v: string) => (v && v.replace(/[^\d+]/g, '').length >= 11) || 'Phone number must be at least 11 digits'
+                                            ]"
+                                        />
+                                    </v-col>
+
                                     <v-col cols="12">
                                         <v-textarea
                                             v-model="form.address"

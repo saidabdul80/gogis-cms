@@ -52,6 +52,7 @@ class Invoice extends Model
         ];
     }
 
+
     // Relationships
     public function customer()
     {
@@ -122,5 +123,24 @@ class Invoice extends Model
     public function hasPaymentUrl(): bool
     {
         return !is_null($this->giras_payment_url);
+    }
+
+    //update invoice_id and handle error
+      public function getGirasInvoiceIdAttribute()
+    {
+        if(isset($this->giras_response['data'][0]['id'])){
+            return $this->giras_response['data'][0]['id'];
+        }else{
+            return $this->giras_invoice_id;
+        }   
+    }
+
+    public function getGirasInvoiceNumberAttribute()
+    {
+        if(isset($this->giras_response['data'][0]['invoice_number'])){
+            return $this->giras_response['data'][0]['invoice_number'];
+        }else{
+            return $this->giras_invoice_number;
+        }   
     }
 }

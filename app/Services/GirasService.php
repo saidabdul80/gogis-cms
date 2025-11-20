@@ -121,15 +121,12 @@ class GirasService
                 'gateway' => $gateway
             ];
 
-            Log::info('GIRAS Multi Invoice Request', $payload);
-
             $response = Http::withHeaders($this->headers)
                 ->timeout(30)
                 ->post("{$this->baseUrl}/multi_tax_invoices", $payload);
 
             if ($response->successful()) {
                 $data = $response->json();
-                Log::info('GIRAS Multi Invoice Response', $data);
                 return $data;
             }
 
@@ -146,7 +143,7 @@ class GirasService
                 'message' => $e->getMessage(),
                 'request' => $entries
             ]);
-            throw $e;
+            throw new Exception($e->getMessage(),400);
         }
     }
 

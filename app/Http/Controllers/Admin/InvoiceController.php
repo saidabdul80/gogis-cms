@@ -331,6 +331,11 @@ class InvoiceController extends Controller
     public function show(Invoice $invoice)
     {
         $invoice->load(['customer', 'property.propertyType', 'issuer', 'payments']);
+        if(isset($invoice->giras_response['data'][0]['invoice_number'])){
+            $invoiceNumber =  $invoice->giras_response['data'][0]['invoice_number'];
+        }else{
+            $invoiceNumber =  $invoice->giras_invoice_number;
+        } 
 
         return Inertia::render('Admin/Invoices/Show', [
             'invoice' => [
@@ -372,7 +377,7 @@ class InvoiceController extends Controller
                 'giras' => [
                     'synced' => $invoice->isSyncedWithGiras(),
                     'invoice_id' => $invoice->giras_invoice_id,
-                    'invoice_number' => $invoice->giras_invoice_number,
+                    'invoice_number' => $invoiceNumber,
                     'reference' => $invoice->giras_reference,
                     'payment_url' => $invoice->giras_payment_url,
                     'gateway' => $invoice->giras_gateway,

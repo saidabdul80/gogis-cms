@@ -126,21 +126,23 @@ class Invoice extends Model
     }
 
     //update invoice_id and handle error
-      public function getGirasInvoiceIdAttribute()
+     public function getGirasInvoiceIdAttribute()
     {
         if(isset($this->giras_response['data'][0]['id'])){
             return $this->giras_response['data'][0]['id'];
-        }else{
-            return $this->giras_invoice_id;
+        } else {
+            return $this->attributes['giras_invoice_id'] ?? null;
         }   
     }
 
-    public function getGirasInvoiceNumberAttribute()
+
+   public function getGirasInvoiceNumberAttribute()
     {
         if(isset($this->giras_response['data'][0]['invoice_number'])){
             return $this->giras_response['data'][0]['invoice_number'];
-        }else{
-            return $this->giras_invoice_number;
+        } else {
+            return $this->attributes['giras_invoice_number'] ?? null;
         }   
     }
+
 }

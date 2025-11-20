@@ -332,7 +332,7 @@ class InvoiceController extends Controller
                 'number_value' => $invoice->number_value,
                 'amount' => $invoice->amount,
                 'paid_amount' => $invoice->paid_amount,
-                'remaining_amount' => $invoice->remaining_amount,
+                'remaining_amount' => $invoice->amount - $invoice->paid_amount,
                 'currency' => $invoice->currency,
                 'issue_date' => $invoice->issue_date->format('Y-m-d'),
                 'due_date' => $invoice->due_date ? $invoice->due_date->format('Y-m-d') : null,
@@ -622,14 +622,13 @@ class InvoiceController extends Controller
                 $invoice->update([
                     'payment_status' => $newInvoiceStatus,
                     'paid_amount' => $newPaidAmount,
-                    'remaining_amount' => $newRemainingAmount,
                 ]);
 
                 Log::info('Invoice Updated After Revalidation', [
                     'invoice_id' => $invoice->id,
                     'payment_status' => $newInvoiceStatus,
                     'paid_amount' => $invoice->paid_amount,
-                    'remaining_amount' => $invoice->remaining_amount,
+                    'remaining_amount' => $invoice->amount - $invoice->paid_amount,
                 ]);
 
                 return back()->with('success', 'Payment verified successfully! Invoice has been updated.');
@@ -732,17 +731,18 @@ class InvoiceController extends Controller
 
             // Update invoice if payment was successful
             if ($paymentStatus === 'SUCCESS') {
+                $newPaidAmount = $invoice->paid_amount + $payment->paid_amount;
+
                 $invoice->update([
                     'payment_status' => $invoicePaymentStatus,
-                    'paid_amount' => $invoice->paid_amount + $payment->paid_amount,
-                    'remaining_amount' => max(0, $invoice->amount - ($invoice->paid_amount + $payment->paid_amount)),
+                    'paid_amount' => $newPaidAmount,
                 ]);
 
                 Log::info('Invoice Updated After Successful Payment', [
                     'invoice_id' => $invoice->id,
                     'payment_status' => $invoicePaymentStatus,
                     'paid_amount' => $invoice->paid_amount,
-                    'remaining_amount' => $invoice->remaining_amount,
+                    'remaining_amount' => $invoice->amount - $invoice->paid_amount,
                 ]);
 
                 return redirect()->route('admin.invoices.show', $invoice)

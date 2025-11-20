@@ -1,0 +1,84 @@
+@GOGIS is a fresh laravel inertia repo, so we will be building the ⁠GOGIS Web App that will contains the website and the app itself and also everything on the website should be updatable i.e dynamic content like the about us, the news, the events, the contact us information etc from the admin User, 
+so I already install spatie/laravel-permission for role management and we will be using inertiajs for the frontend and we will be using tailwindcss for styling and we will be using vuejs for the frontend framework
+
+
+- admin user
+- taxpayers user
+revenue_sub_heads
+`id`, `name`, `code`, `remark`
+- invoice_types
+ `id`, `template`, `currency`, `region_type`, `frequency`,
+  `start_date`, `end_date`, `revenue_sub_head_id`, `status`,
+   `created_at`, `updated_at`
+- invoices
+`id`, `invoice_number`, `amount`, `paid_amount`, `charges`,
+ `currency`, `issue_date`, `due_date`, `taxpayer_id`, `issuer_id`,
+  `payment_status`, `template`, `variables`, `description`, `download_count`,
+  `invoice_type_id` (nullable), `created_at`, `updated_at` 
+
+-payments
+`id`, `reference`, `payment_date`, `amount`, `paid_amount`, 
+`charges`, `status`, `gateway`, `channel`,
+ `owner_type`, `redirect`, `owner_id`, `created_at`, 
+ `updated_at`, `revenue_sub_head_id`, 
+ `revenue_head_id`, `revenue_source_id`, `revenue_source_type`, `download_count`,
+   `description`
+
+## Website Information requirements 
+
+Gombe Geographic Information System (GOGIS)
+
+# Media Handles:
+1.⁠ ⁠Facebook: https://www.facebook.com/GOGISOFFICIAL
+2.⁠ ⁠Instagram: https://www.instagram.com/officialgogis
+
+# Core Agency’s Mandate
+•⁠  ⁠Land Administration
+•⁠  ⁠⁠Cadastral Mapping
+•⁠  ⁠⁠Remote Sensning
+•⁠  ⁠⁠Geographic Information Systems (GIS)
+
+Address: G.R.A Drive, Adjacent Treasury House Gombe, Gombe State
+
+# Core Agency’s Mandate
+•⁠  ⁠Land Administration
+•⁠  ⁠⁠Cadastral Mapping
+•⁠  ⁠⁠Remote Sensning
+•⁠  ⁠⁠Geographic Information Systems (GIS)
+
+Address: G.R.A Drive, Adjacent Treasury House Gombe, Gombe State
+
+
+# About us:
+The Gombe Geographic Information System (GOGIS) is the agency responsible for digitalized land administration, cadastral mapping, and land registration in Gombe State, Nigeria. 
+It was established to modernize land governance, resolve land conflicts, and improve revenue generation for the state government.
+
+# Key Functions and Objectives
+GOGIS operates as a national model for digital land administration in Nigeria. Its core business functions and objectives include: 
+1.⁠ ⁠Land Administration: Managing the process of determining, recording, and disseminating information about land acquisition, ownership, value, and management policies.
+2.⁠ ⁠Conflict Resolution: Putting an end to land conflicts often caused by unauthorized transactions, thereby ensuring peace and economic stability.
+3.⁠ ⁠Digitalization and Mapping: Transitioning from manual archiving of land documents to a fully automated and secure digital system, including the digitization of manual land files and layouts.
+4.⁠ ⁠Title Registration and Issuance: Processing and issuing formal land titles, such as Rights of Occupancy (RofO) and Certificates of Occupancy (CofO), with processes aiming for completion within specific timelines (two weeks for RofO, thirty working days for CofO).
+5.⁠ ⁠Revenue Generation: Contributing significantly to the state's Internally Generated Revenue (IGR) through efficient and transparent land transactions and property taxation.
+6.⁠ ⁠Urban Planning and Development: Supporting planned, sustainable urban development initiatives such as the Gombe Capital Special Development Zone and the Shehu Abubakar District.
+7.⁠ ⁠Data Management: Ensuring the integrity, security, and accessibility of geospatial data for use by various government departments and stakeholders.
+
+
+# Dr. Kabiru Usman Hassan, Director General, GOGIS.
+# About DG
+The current director general, was appointed in 2020 by the governor of Gombe State, His Excellency Alh Muhammadu Inuwa Yahaya, CON.
+Dr. Hassan was also reappointed to continue spearheading the mandate of the agency on July 14, 2023.
+
+
+# Contact Us
+Email: info@gogis.gov.gm.ng
+
+
+Recent News:
+#INSIDEGOGIS: DG Hosts GOSUPDA Team as Agencies Move to Implement Executive Order 007 at Shehu Abubakar District
+
+….scheduled to officially begin on 24th November 2025
+
+The Director-General of Gombe Geographic Information Systems (GOGIS), Dr Kabiru Usman Hassan, alongside technical staff from the agency earlier hosted a team from the Gombe State Urban Planning and Development Authority (GOSUPDA) at the agency’s headquarters for a strategic meeting ahead of the implementation of Executive Order 007 at the Shehu Abubakar District. The exercise is scheduled to officially begin on 24th November 2025.
+
+We may recall that the Executive Order 007, signed by His Excellency, Governor Muhammadu Inuwa Yahaya (CON, Danmajen Gombe), revoked all former Rights of Occupancy in the former BAP-4 Layout, now Shehu Abubakar District, to restore order, eliminate distortions, and pave the way for a fully regulated and environmentally secure redevelopment of the area.

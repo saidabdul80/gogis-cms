@@ -24,9 +24,7 @@ Route::post('/contact', [ContactController::class, 'store'])->name('contact.stor
 
 // Admin Dashboard (protected by auth middleware)
 Route::middleware(['auth:web'])->prefix('admin')->name('admin.')->group(function () {
-    Route::get('/dashboard', function () {
-        return inertia('Admin/Dashboard');
-    })->name('dashboard');
+    Route::get('/dashboard', [App\Http\Controllers\Admin\DashboardController::class, 'index'])->name('dashboard');
 
     // Settings Management
     Route::get('/settings', [App\Http\Controllers\Admin\SettingsController::class, 'index'])->name('settings.index');

@@ -14,6 +14,8 @@ This script ensures the correct build order:
 2. Install Node dependencies
 3. Build frontend assets
 
+**Note:** The build script requires PHP and Composer to be available in the PATH. This is automatically configured on Render's PHP environment.
+
 ### Option 2: Manual Build Command
 
 If you prefer not to use the build script, use this build command:

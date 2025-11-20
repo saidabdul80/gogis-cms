@@ -242,10 +242,10 @@ class InvoiceController extends Controller
             // Check if it's a GIRAS validation error
             $errorMessage = $e->getMessage();
             if (str_contains($errorMessage, 'phone number')) {
-                return back()->withInput()->withErrors(['error' => 'GIRAS Validation Error: ' . $errorMessage . ' Please update the customer\'s phone number and try again.']);
+                return back()->withInput()->with('error', 'GIRAS Validation Error: ' . $errorMessage . ' Please update the customer\'s phone number and try again.');
             }
 
-            return back()->withInput()->withErrors(['error' => 'Failed to create invoice: ' . $errorMessage]);
+            return back()->withInput()->with('error', 'Failed to create invoice: ' . $errorMessage);
         }
     }
 

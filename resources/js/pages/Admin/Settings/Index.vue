@@ -1,6 +1,7 @@
 <script setup lang="ts">
 import { Head, useForm, router } from '@inertiajs/vue3'
 import AdminLayout from '@/layouts/AdminLayout.vue'
+import RichTextEditor from '@/components/RichTextEditor.vue'
 import { ref, watch, onMounted } from 'vue'
 
 const props = defineProps<{
@@ -24,6 +25,10 @@ const form = useForm({
     dg_name: props.settings.dg_name || '',
     dg_title: props.settings.dg_title || '',
     dg_bio: props.settings.dg_bio || '',
+    // About Section Settings
+    about_background: props.settings.about_background || '',
+    about_objective: props.settings.about_objective || '',
+    about_timeline: props.settings.about_timeline || '',
     logo: null as File | null,
     dg_image: null as File | null,
     // Social Media API Settings
@@ -115,6 +120,7 @@ const submit = () => {
                         <v-tab class="mr-1" value="social">Social Media</v-tab>
                         <v-tab class="mr-1" value="social-api">Social Media API</v-tab>
                         <v-tab class="mr-1" value="content">Content</v-tab>
+                        <v-tab class="mr-1" value="about">About GOGIS</v-tab>
                     </v-tabs>
 
                     <v-card-text class="px-0 py-4">
@@ -448,6 +454,39 @@ const submit = () => {
                                                 :error-messages="form.errors.dg_bio"
                                                 rows="5"
                                             />
+                                        </v-col>
+                                    </v-row>
+                                </v-window-item>
+
+                                <!-- About GOGIS Tab -->
+                                <v-window-item value="about">
+                                    <v-row>
+                                        <v-col cols="12">
+                                            <h3 class="text-h6 mb-4">Background</h3>
+                                            <RichTextEditor
+                                                v-model="form.about_background"
+                                                label="Background"
+                                                :error-messages="form.errors.about_background"
+                                            />
+                                            <p class="text-caption text-grey mt-2">This will be displayed on the home page</p>
+                                        </v-col>
+                                        <v-col cols="12" class="mt-4">
+                                            <h3 class="text-h6 mb-4">Objective</h3>
+                                            <RichTextEditor
+                                                v-model="form.about_objective"
+                                                label="Objective"
+                                                :error-messages="form.errors.about_objective"
+                                            />
+                                            <p class="text-caption text-grey mt-2">Use the bullet list button in the toolbar to create lists</p>
+                                        </v-col>
+                                        <v-col cols="12" class="mt-4">
+                                            <h3 class="text-h6 mb-4">Timeline</h3>
+                                            <RichTextEditor
+                                                v-model="form.about_timeline"
+                                                label="Timeline"
+                                                :error-messages="form.errors.about_timeline"
+                                            />
+                                            <p class="text-caption text-grey mt-2">Information about processing timelines</p>
                                         </v-col>
                                     </v-row>
                                 </v-window-item>

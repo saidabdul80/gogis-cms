@@ -182,6 +182,63 @@ onMounted(() => {
       </v-sheet>
     </v-container>
 
+    <!-- About GOGIS Section -->
+    <v-container class="py-16" v-if="$page.props.appSettings.aboutBackground || $page.props.appSettings.aboutObjective || $page.props.appSettings.aboutTimeline">
+      <v-row>
+        <v-col cols="12">
+          <div class="text-center mb-12">
+            <h2 class="text-h3 font-weight-bold mb-4" :style="{ color: settings.primary_color }">
+              About GOGIS
+            </h2>
+            <p class="text-h6 text-grey-darken-1">
+              Gombe State Geographic Information Systems
+            </p>
+          </div>
+        </v-col>
+      </v-row>
+
+      <v-row>
+        <!-- Background Section -->
+        <v-col cols="12" v-if="$page.props.appSettings.aboutBackground">
+          <v-card elevation="2" class="pa-6 mb-6">
+            <div class="d-flex align-center mb-4">
+              <v-icon :color="settings.primary_color" size="32" class="mr-3">mdi-information-outline</v-icon>
+              <h3 class="text-h5 font-weight-bold" :style="{ color: settings.primary_color }">
+                1. Background
+              </h3>
+            </div>
+            <div class="about-content text-body-1 text-grey-darken-2" v-html="$page.props.appSettings.aboutBackground"></div>
+          </v-card>
+        </v-col>
+
+        <!-- Objective Section -->
+        <v-col cols="12" v-if="$page.props.appSettings.aboutObjective">
+          <v-card elevation="2" class="pa-6 mb-6">
+            <div class="d-flex align-center mb-4">
+              <v-icon :color="settings.primary_color" size="32" class="mr-3">mdi-target</v-icon>
+              <h3 class="text-h5 font-weight-bold" :style="{ color: settings.primary_color }">
+                2. Objective
+              </h3>
+            </div>
+            <div class="about-content text-body-1 text-grey-darken-2" v-html="$page.props.appSettings.aboutObjective"></div>
+          </v-card>
+        </v-col>
+
+        <!-- Timeline Section -->
+        <v-col cols="12" v-if="$page.props.appSettings.aboutTimeline">
+          <v-card elevation="2" class="pa-6">
+            <div class="d-flex align-center mb-4">
+              <v-icon :color="settings.primary_color" size="32" class="mr-3">mdi-clock-outline</v-icon>
+              <h3 class="text-h5 font-weight-bold" :style="{ color: settings.primary_color }">
+                3. Timeline
+              </h3>
+            </div>
+            <div class="about-content text-body-1 text-grey-darken-2" v-html="$page.props.appSettings.aboutTimeline"></div>
+          </v-card>
+        </v-col>
+      </v-row>
+    </v-container>
+
     <!-- Latest News Section -->
     <v-container class="py-16">
       <div class="text-center mb-12">
@@ -410,5 +467,72 @@ onMounted(() => {
 :deep(.v-card:hover .v-card-text),
 :deep(.v-card:hover .v-card-subtitle) {
   color: inherit !important;
+}
+
+/* About content styling */
+.about-content {
+  line-height: 1.8;
+}
+
+.about-content :deep(p) {
+  margin-bottom: 1em;
+}
+
+.about-content :deep(h1),
+.about-content :deep(h2),
+.about-content :deep(h3),
+.about-content :deep(h4),
+.about-content :deep(h5),
+.about-content :deep(h6) {
+  margin-top: 1.5em;
+  margin-bottom: 0.75em;
+  font-weight: 600;
+  line-height: 1.3;
+}
+
+.about-content :deep(h1) {
+  font-size: 2em;
+}
+
+.about-content :deep(h2) {
+  font-size: 1.75em;
+}
+
+.about-content :deep(h3) {
+  font-size: 1.5em;
+}
+
+.about-content :deep(ul),
+.about-content :deep(ol) {
+  margin-bottom: 1em;
+  padding-left: 2em;
+}
+
+.about-content :deep(li) {
+  margin-bottom: 0.5em;
+}
+
+.about-content :deep(strong) {
+  font-weight: 600;
+}
+
+.about-content :deep(em) {
+  font-style: italic;
+}
+
+.about-content :deep(a) {
+  color: var(--color-primary);
+  text-decoration: underline;
+}
+
+.about-content :deep(a:hover) {
+  opacity: 0.8;
+}
+
+.about-content :deep(img) {
+  max-width: 100%;
+  height: auto;
+  border-radius: 8px;
+  margin: 1em 0;
 }
 </style>

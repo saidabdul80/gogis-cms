@@ -42,16 +42,19 @@ class HandleInertiaRequests extends Middleware
         return [
             ...parent::share($request),
             'name' => config('app.name'),
+            'currentRoute' => $request->route()->getName(),
             'quote' => ['message' => trim($message), 'author' => trim($author)],
             'auth' => [
                 'user' => $request->user(),
             ],
             'sidebarOpen' => ! $request->hasCookie('sidebar_state') || $request->cookie('sidebar_state') === 'true',
+            'csrf_token' => csrf_token(),
             'flash' => [
                 'success' => $request->session()->get('success'),
                 'error' => $request->session()->get('error'),
                 'warning' => $request->session()->get('warning'),
                 'info' => $request->session()->get('info'),
+                'paymentData' => $request->session()->get('paymentData'),
             ],
             // Global settings for dynamic theming and site info
             'appSettings' => [
@@ -69,6 +72,10 @@ class HandleInertiaRequests extends Middleware
                 'twitterLink' => Setting::get('twitter_link'),
                 'linkedinLink' => Setting::get('linkedin_link'),
                 'footerText' => Setting::get('footer_text'),
+                // About GOGIS section
+                'aboutBackground' => Setting::get('about_background'),
+                'aboutObjective' => Setting::get('about_objective'),
+                'aboutTimeline' => Setting::get('about_timeline'),
             ],
         ];
     }

@@ -19,8 +19,10 @@ class Payment extends Model
         'gateway',
         'channel',
         'redirect',
-        'owner_type',
-        'owner_id',
+        'customer_type',
+        'customer_id',
+        'property_id',
+        'invoice_id',
         'revenue_sub_head_id',
         'revenue_head_id',
         'revenue_source_id',
@@ -40,9 +42,19 @@ class Payment extends Model
     }
 
     // Relationships
-    public function owner()
+    public function customer()
     {
         return $this->morphTo();
+    }
+
+    public function property()
+    {
+        return $this->belongsTo(Property::class);
+    }
+
+    public function invoice()
+    {
+        return $this->belongsTo(Invoice::class);
     }
 
     public function revenueSubHead()

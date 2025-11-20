@@ -1,5 +1,6 @@
 <script setup lang="ts">
 import { ref } from 'vue'
+import { watchDebounced } from '@vueuse/core'
 import { router, Link } from '@inertiajs/vue3'
 import AdminLayout from '@/layouts/AdminLayout.vue'
 import GChip from '@/components/GChip.vue'
@@ -23,13 +24,34 @@ interface Props {
         per_page: number
         total: number
     }
+    filters: {
+        search?: string
+        status?: string
+    }
 }
 
 const props = defineProps<Props>()
 
-const search = ref('')
+const search = ref(props.filters.search || '')
+const statusFilter = ref(props.filters.status || '')
 const deleteDialog = ref(false)
 const newsToDelete = ref<News | null>(null)
+
+const statusOptions = [
+    { title: 'All', value: '' },
+    { title: 'Published', value: 'published' },
+    { title: 'Draft', value: 'draft' }
+]
+
+watchDebounced([search, statusFilter], () => {
+    router.get(route('admin.news.index'), {
+        search: search.value,
+        status: statusFilter.value
+    }, {
+        preserveState: true,
+        replace: true
+    })
+}, { debounce: 300 })
 
 const formatDate = (date: string | null) => {
     if (!date) return 'Draft'
@@ -51,7 +73,7 @@ const confirmDelete = (news: News) => {
 
 const deleteNews = () => {
     if (newsToDelete.value) {
-        router.delete(route('admin.news.destroy', newsToDelete.value.id), {
+        router.delete(route('admin.news.destroy', newsToDelete.value.slug), {
             preserveScroll: true,
             onSuccess: () => {
                 deleteDialog.value = false
@@ -88,15 +110,25 @@ const stripHtml = (html: string) => {
                         </v-card-title>
 
                         <v-card-text>
-                            <v-text-field
-                                v-model="search"
-                                prepend-inner-icon="mdi-magnify"
-                                label="Search news..."
-                                variant="outlined"
-                                density="compact"
-                                hide-details
-                                class="mb-4"
-                            />
+                            <!-- Filters -->
+                            <v-row class="mb-4">
+                                <v-col cols="12" md="8">
+                                    <v-text-field
+                                        v-model="search"
+                                        prepend-inner-icon="mdi-magnify"
+                                        label="Search news..."
+                                        placeholder="Search by title, content, or slug"
+                                        clearable
+                                    />
+                                </v-col>
+                                <v-col cols="12" md="4">
+                                    <v-select
+                                        v-model="statusFilter"
+                                        :items="statusOptions"
+                                        label="Status"
+                                    />
+                                </v-col>
+                            </v-row>
 
                             <v-list lines="three">
                                 <v-list-item
@@ -140,7 +172,7 @@ const stripHtml = (html: string) => {
 
                                     <template #append>
                                         <div class="d-flex flex-column ga-2">
-                                            <Link :href="route('admin.news.edit', item.id)">
+                                            <Link :href="route('admin.news.edit', item.slug)">
                                                 <v-btn
                                                     icon="mdi-pencil"
                                                     size="small"
@@ -159,6 +191,14 @@ const stripHtml = (html: string) => {
                                     </template>
                                 </v-list-item>
                             </v-list>
+
+                            <v-pagination
+                                v-if="news.last_page > 1"
+                                :length="news.last_page"
+                                :model-value="news.current_page"
+                                @update:model-value="(page) => router.visit(route('admin.news.index', { page, search: search, status: statusFilter }))"
+                                class="mt-4"
+                            />
                         </v-card-text>
                     </v-card>
                 </v-col>

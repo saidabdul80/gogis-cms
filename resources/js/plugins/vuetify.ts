@@ -62,6 +62,7 @@ export default createVuetify({
       variant: 'outlined',
       color: 'primary',
     },
+
     VSelect: {
       variant: 'outlined',
       color: 'primary',

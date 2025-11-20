@@ -22,6 +22,7 @@ interface Props {
 const props = defineProps<Props>()
 
 const form = useForm({
+    _method: 'PUT',
     title: props.news.title,
     content: props.news.content,
     cover_image: null as File | null,
@@ -61,7 +62,7 @@ const handlePublishNowChange = (value: boolean) => {
 }
 
 const submit = () => {
-    form.post(route('admin.news.update', props.news.id), {
+    form.post(route('admin.news.update', props.news.slug), {
         preserveScroll: true,
         forceFormData: true,
         onSuccess: () => {

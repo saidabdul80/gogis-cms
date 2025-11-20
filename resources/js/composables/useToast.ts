@@ -10,10 +10,13 @@ const toasts = ref<Toast[]>([])
 
 export function useToast() {
     const show = (message: string, type: Toast['type'] = 'info', timeout = 5000) => {
+        console.log('useToast: Adding toast:', { message, type, timeout })
         toasts.value.push({ message, type, timeout })
+        console.log('useToast: Current toasts:', toasts.value)
     }
 
     const success = (message: string, timeout = 5000) => {
+        console.log('useToast: success() called with:', message)
         show(message, 'success', timeout)
     }
 

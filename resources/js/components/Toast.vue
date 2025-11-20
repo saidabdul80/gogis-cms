@@ -10,16 +10,21 @@ const page = usePage()
 watch(
     () => page.props.flash,
     (flash: any) => {
+        console.log('Toast: Flash messages changed:', flash)
         if (flash?.success) {
+            console.log('Toast: Showing success message:', flash.success)
             success(flash.success)
         }
         if (flash?.error) {
+            console.log('Toast: Showing error message:', flash.error)
             error(flash.error)
         }
         if (flash?.warning) {
+            console.log('Toast: Showing warning message:', flash.warning)
             warning(flash.warning)
         }
         if (flash?.info) {
+            console.log('Toast: Showing info message:', flash.info)
             info(flash.info)
         }
     },
@@ -78,8 +83,8 @@ const getIcon = (type: string) => {
     <div class="toast-container">
         <v-snackbar
             v-for="(toast, index) in toasts"
-            :key="index"
-            v-model="toasts[index]"
+            :key="`toast-${index}-${Date.now()}`"
+            :model-value="true"
             :color="getColor(toast.type)"
             :timeout="toast.timeout"
             location="top right"

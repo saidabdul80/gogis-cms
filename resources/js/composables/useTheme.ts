@@ -32,29 +32,15 @@ export function useTheme() {
       root.style.setProperty('--color-secondary', appSettings.value.secondaryColor)
       root.style.setProperty('--color-accent', appSettings.value.accentColor)
 
-      // Apply to Vuetify theme dynamically
-      vuetifyTheme.themes.value.gogisTheme = {
-        dark: false,
-        colors: {
-          primary: appSettings.value.primaryColor,
-          secondary: appSettings.value.secondaryColor,
-          accent: appSettings.value.accentColor,
-          error: '#ef4444',
-          info: '#3b82f6',
-          success: '#10b981',
-          warning: '#f59e0b',
-          background: '#f9fafb',
-          surface: '#ffffff',
-          'on-background': '#000000',
-          'on-surface': '#000000',
-          'on-primary': '#ffffff',
-          'on-secondary': '#000000',
-          'on-success': '#ffffff',
-          'on-warning': '#000000',
-          'on-error': '#ffffff',
-          'on-info': '#ffffff',
-        },
-        variables: {},
+      // Apply to Vuetify theme dynamically by updating the theme object
+      const currentTheme = vuetifyTheme.themes.value.gogisTheme
+      if (currentTheme && currentTheme.colors) {
+        currentTheme.colors.primary = appSettings.value.primaryColor
+        currentTheme.colors.secondary = appSettings.value.secondaryColor
+        currentTheme.colors.accent = appSettings.value.accentColor
+        currentTheme.colors['on-primary'] = '#ffffff'
+        currentTheme.colors['on-secondary'] = '#000000'
+        currentTheme.colors['on-accent'] = '#ffffff'
       }
     }
   }

@@ -11,13 +11,17 @@ class Invoice extends Model
 
     protected $fillable = [
         'invoice_number',
+        'number_type',
+        'number_value',
         'amount',
         'paid_amount',
         'charges',
         'currency',
         'issue_date',
         'due_date',
-        'taxpayer_id',
+        'customer_id',
+        'customer_type',
+        'property_id',
         'issuer_id',
         'payment_status',
         'template',
@@ -25,6 +29,13 @@ class Invoice extends Model
         'description',
         'download_count',
         'invoice_type_id',
+        'giras_invoice_id',
+        'giras_invoice_number',
+        'giras_reference',
+        'giras_payment_url',
+        'giras_gateway',
+        'giras_response',
+        'giras_synced_at',
     ];
 
     protected function casts(): array
@@ -36,13 +47,20 @@ class Invoice extends Model
             'issue_date' => 'date',
             'due_date' => 'date',
             'variables' => 'array',
+            'giras_response' => 'array',
+            'giras_synced_at' => 'datetime',
         ];
     }
 
     // Relationships
-    public function taxpayer()
+    public function customer()
     {
-        return $this->belongsTo(Taxpayer::class);
+        return $this->morphTo();
+    }
+
+    public function property()
+    {
+        return $this->belongsTo(Property::class);
     }
 
     public function issuer()
@@ -53,6 +71,11 @@ class Invoice extends Model
     public function invoiceType()
     {
         return $this->belongsTo(InvoiceType::class);
+    }
+
+    public function payments()
+    {
+        return $this->hasMany(Payment::class);
     }
 
     // Scopes
@@ -89,5 +112,15 @@ class Invoice extends Model
         return $this->due_date &&
                $this->due_date->isPast() &&
                !$this->isFullyPaid();
+    }
+
+    public function isSyncedWithGiras(): bool
+    {
+        return !is_null($this->giras_invoice_id) && !is_null($this->giras_synced_at);
+    }
+
+    public function hasPaymentUrl(): bool
+    {
+        return !is_null($this->giras_payment_url);
     }
 }

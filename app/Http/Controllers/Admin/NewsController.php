@@ -22,12 +22,38 @@ class NewsController extends Controller
     /**
      * Display a listing of the resource.
      */
-    public function index()
+    public function index(Request $request)
     {
-        $news = News::latest('created_at')->paginate(15);
+        $query = News::query();
+
+        // Search functionality
+        if ($request->has('search')) {
+            $search = $request->search;
+            $query->where(function ($q) use ($search) {
+                $q->where('title', 'like', "%{$search}%")
+                    ->orWhere('content', 'like', "%{$search}%")
+                    ->orWhere('slug', 'like', "%{$search}%");
+            });
+        }
+
+        // Filter by published status
+        if ($request->has('status') && $request->status !== '') {
+            if ($request->status === 'published') {
+                $query->whereNotNull('published_at')
+                    ->where('published_at', '<=', now());
+            } elseif ($request->status === 'draft') {
+                $query->where(function ($q) {
+                    $q->whereNull('published_at')
+                        ->orWhere('published_at', '>', now());
+                });
+            }
+        }
+
+        $news = $query->latest('created_at')->paginate(15);
 
         return Inertia::render('Admin/News/Index', [
             'news' => $news,
+            'filters' => $request->only(['search', 'status']),
         ]);
     }
 

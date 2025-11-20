@@ -1,0 +1,30 @@
+<?php
+
+use Illuminate\Database\Migrations\Migration;
+use Illuminate\Database\Schema\Blueprint;
+use Illuminate\Support\Facades\Schema;
+
+return new class extends Migration
+{
+    /**
+     * Run the migrations.
+     */
+    public function up(): void
+    {
+        Schema::table('corporate_customers', function (Blueprint $table) {
+            $table->enum('category', ['Company', 'Hotel', 'Bank', 'Hospital', 'School', 'MDAs', 'Others'])
+                ->nullable()
+                ->after('name');
+        });
+    }
+
+    /**
+     * Reverse the migrations.
+     */
+    public function down(): void
+    {
+        Schema::table('corporate_customers', function (Blueprint $table) {
+            $table->dropColumn('category');
+        });
+    }
+};

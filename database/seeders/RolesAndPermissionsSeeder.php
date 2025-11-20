@@ -27,8 +27,12 @@ class RolesAndPermissionsSeeder extends Seeder
 
             // User Management
             'manage admins',
-            'manage taxpayers',
-            'view taxpayers',
+            'manage customers',
+            'view customers',
+
+            // Property Management
+            'manage properties',
+            'view properties',
 
             // Revenue Management
             'manage revenue heads',
@@ -71,8 +75,10 @@ class RolesAndPermissionsSeeder extends Seeder
             'manage news',
             'manage events',
             'manage media gallery',
-            'manage taxpayers',
-            'view taxpayers',
+            'manage customers',
+            'view customers',
+            'manage properties',
+            'view properties',
             'manage revenue heads',
             'manage revenue sub heads',
             'view revenue reports',
@@ -99,7 +105,8 @@ class RolesAndPermissionsSeeder extends Seeder
         // Finance Officer - manages invoices and payments
         $financeOfficer = Role::create(['name' => 'Finance Officer', 'guard_name' => 'web']);
         $financeOfficer->givePermissionTo([
-            'view taxpayers',
+            'view customers',
+            'view properties',
             'view revenue reports',
             'create invoices',
             'edit invoices',
@@ -113,7 +120,8 @@ class RolesAndPermissionsSeeder extends Seeder
         // Viewer - read-only access
         $viewer = Role::create(['name' => 'Viewer', 'guard_name' => 'web']);
         $viewer->givePermissionTo([
-            'view taxpayers',
+            'view customers',
+            'view properties',
             'view invoices',
             'view payments',
             'view revenue reports',

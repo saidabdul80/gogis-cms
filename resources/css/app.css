@@ -413,12 +413,6 @@
     color: rgba(0, 0, 0, 0.87) !important;
 }
 
-.v-list-item--active > *:not(.v-chip),
-.v-list-item--active .v-list-item__content,
-.v-list-item--active .v-list-item__content * {
-    color: rgb(255, 255, 255) !important;
-}
-
 .v-list-item--active:hover > *:not(.v-chip),
 .v-list-item--active:hover .v-list-item__content,
 .v-list-item--active:hover .v-list-item__content * {

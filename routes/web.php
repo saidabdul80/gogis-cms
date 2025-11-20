@@ -52,11 +52,24 @@ Route::middleware(['auth:web'])->prefix('admin')->name('admin.')->group(function
     Route::post('/media', [App\Http\Controllers\Admin\MediaController::class, 'store'])->name('media.store');
     Route::delete('/media/{id}', [App\Http\Controllers\Admin\MediaController::class, 'destroy'])->name('media.destroy');
 
-    // Taxpayers Management
-    Route::resource('taxpayers', App\Http\Controllers\Admin\TaxpayerController::class);
+    // Customers Management
+    Route::get('/customers/search', [App\Http\Controllers\Admin\CustomerSearchController::class, 'search'])->name('customers.search');
+    Route::resource('individual-customers', App\Http\Controllers\Admin\IndividualCustomerController::class);
+    Route::get('/individual-customers/{individualCustomer}/property-payments', [App\Http\Controllers\Admin\IndividualCustomerController::class, 'propertyPayments'])->name('individual-customers.property-payments');
+    Route::resource('corporate-customers', App\Http\Controllers\Admin\CorporateCustomerController::class);
+    Route::get('/corporate-customers/{corporateCustomer}/property-payments', [App\Http\Controllers\Admin\CorporateCustomerController::class, 'propertyPayments'])->name('corporate-customers.property-payments');
+
+    // Property Types
+    Route::resource('property-types', App\Http\Controllers\Admin\PropertyTypeController::class);
+
+    // Property Profiling
+    Route::resource('properties', App\Http\Controllers\Admin\PropertyController::class);
 
     // Invoices Management
     Route::resource('invoices', App\Http\Controllers\Admin\InvoiceController::class);
+    Route::post('/invoices/{invoice}/initiate-payment', [App\Http\Controllers\Admin\InvoiceController::class, 'initiatePayment'])->name('invoices.initiate-payment');
+    Route::post('/invoices/{invoice}/payments/{payment}/revalidate', [App\Http\Controllers\Admin\InvoiceController::class, 'revalidatePayment'])->name('invoices.payments.revalidate');
+    Route::get('/invoices/{invoice}/giras-callback', [App\Http\Controllers\Admin\InvoiceController::class, 'girasCallback'])->name('invoices.giras-callback');
 
     // Payments Management
     Route::get('/payments', [App\Http\Controllers\Admin\PaymentController::class, 'index'])->name('payments.index');

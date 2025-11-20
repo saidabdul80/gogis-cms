@@ -1,10 +1,24 @@
 <script setup lang="ts">
-import { ref, computed, onMounted } from 'vue'
+import { ref, computed, onMounted, watch } from 'vue'
 import { usePage, Link, router } from '@inertiajs/vue3'
 import { useTheme } from '@/composables/useTheme'
+import { useToast } from '@/composables/useToast'
+import Toast from '@/components/Toast.vue'
 
 const page = usePage()
-const { applyTheme } = useTheme()
+const { applyTheme, appSettings } = useTheme()
+const { success: showSuccess } = useToast()
+
+// Debug: Log when flash messages change
+onMounted(() => {
+    console.log('AdminLayout mounted, flash messages:', page.props.flash)
+    applyTheme()
+})
+
+// Watch for settings changes and reapply theme
+watch(() => appSettings.value, () => {
+    applyTheme()
+}, { deep: true })
 
 const user = computed(() => page.props.auth?.user)
 const drawer = ref(true)
@@ -61,10 +75,28 @@ const menuItems = [
         subheader: 'REVENUE MANAGEMENT'
     },
     {
-        title: 'Taxpayers',
-        icon: 'mdi-account-group',
-        route: 'admin.taxpayers.index',
-        value: 'taxpayers'
+        title: 'Individual Customers',
+        icon: 'mdi-account',
+        route: 'admin.individual-customers.index',
+        value: 'individual-customers'
+    },
+    {
+        title: 'Corporate Customers',
+        icon: 'mdi-domain',
+        route: 'admin.corporate-customers.index',
+        value: 'corporate-customers'
+    },
+    {
+        title: 'Property Types',
+        icon: 'mdi-shape',
+        route: 'admin.property-types.index',
+        value: 'property-types'
+    },
+    {
+        title: 'Property Profiling',
+        icon: 'mdi-home-city',
+        route: 'admin.properties.index',
+        value: 'properties'
     },
     {
         title: 'Invoices',
@@ -102,31 +134,24 @@ const menuItems = [
     }
 ]
 
-const currentRoute = computed(() => {
-    const routeName = page.props.ziggy?.route
-    if (typeof routeName === 'string') {
-        return routeName
-    }
-    return ''
+const currentRoute = computed(()  => {
+    return page.props.currentRoute
 })
 
 const isActive = (routeName: string) => {
-    return currentRoute.value.startsWith(routeName)
+    //split by . and first compare with full name the compare with first part only
+    return currentRoute.value?.startsWith(routeName)
 }
 
 const logout = () => {
     router.post('/logout')
 }
-
-onMounted(() => {
-    applyTheme()
-})
 </script>
 
 <template>
     <v-app>
         <!-- App Bar -->
-        <v-app-bar :color="$page.props.appSettings.primaryColor" prominent>
+        <v-app-bar color="primary" prominent>
             <v-app-bar-nav-icon @click="drawer = !drawer" color="white" />
             
             <v-app-bar-title class="text-white">
@@ -167,9 +192,16 @@ onMounted(() => {
         <!-- Navigation Drawer -->
         <v-navigation-drawer v-model="drawer" permanent width="280">
             <!-- Sidebar Header -->
-            <v-sheet :color="$page.props.appSettings.primaryColor" class="pa-4">
+            <v-sheet color="primary" class="pa-4">
                 <div class="d-flex align-center">
-                    <v-avatar size="40" :color="$page.props.appSettings.accentColor" class="mr-3">
+                    <!-- use logo if not availalble then use mdi-shield-account -->
+                     <v-img
+                        v-if="$page.props.appSettings.logo"
+                        :src="$page.props.appSettings.logo"
+                        width="50"
+                        class="mr-3"
+                    />
+                    <v-avatar v-else size="40" color="accent" class="mr-3">
                         <v-icon color="white">mdi-shield-account</v-icon>
                     </v-avatar>
                     <div>
@@ -188,13 +220,14 @@ onMounted(() => {
                 <template v-for="(item, index) in menuItems" :key="index">
                     <v-divider v-if="item.divider && !item.subheader" class="my-2" />
                     <v-list-subheader v-else-if="item.subheader">{{ item.subheader }}</v-list-subheader>
-                    <Link v-else :href="route(item.route)" class="text-decoration-none">
+                    <Link v-else :href="route(item.route)" class="text-decoration-none" >
                         <v-list-item
                             :prepend-icon="item.icon"
                             :title="item.title"
                             :value="item.value"
                             :active="isActive(item.route)"
-                            :color="$page.props.appSettings.primaryColor"
+                            color="primary"
+                            base-color="primary"
                             rounded="lg"
                             class="mx-2 mb-1 nav-item"
                         />
@@ -209,6 +242,9 @@ onMounted(() => {
                 <slot />
             </v-container>
         </v-main>
+
+        <!-- Toast Notifications -->
+        <Toast />
     </v-app>
 </template>
 
@@ -232,47 +268,33 @@ onMounted(() => {
     color: rgba(0, 0, 0, 0.87) !important;
 }
 
-/* Active items should have white text on primary color background */
-:deep(.nav-menu .nav-item.v-list-item--active) {
-    background-color: v-bind('$page.props.appSettings.primaryColor') !important;
-    color: white !important;
+/* Force active items to use primary color background */
+:deep(.nav-menu .v-list-item.v-list-item--active) {
+    background-color: rgb(var(--v-theme-primary)) !important;
+    color: rgb(var(--v-theme-on-primary)) !important;
 }
 
-:deep(.nav-menu .nav-item.v-list-item--active:hover) {
-    background-color: v-bind('$page.props.appSettings.primaryColor') !important;
-    color: white !important;
-}
-
-:deep(.nav-menu .nav-item.v-list-item--active .v-list-item-title),
-:deep(.nav-menu .nav-item.v-list-item--active .v-icon) {
-    color: white !important;
-}
-
-:deep(.nav-menu .nav-item.v-list-item--active:hover .v-list-item-title),
-:deep(.nav-menu .nav-item.v-list-item--active:hover .v-icon) {
-    color: white !important;
-}
-
-/* Force all children to inherit */
-:deep(.nav-menu .nav-item *) {
-    color: inherit !important;
-}
-
-:deep(.nav-menu .nav-item:hover *) {
-    color: rgba(0, 0, 0, 0.87) !important;
-}
-
-:deep(.nav-menu .nav-item.v-list-item--active *) {
-    color: white !important;
-}
-
-:deep(.nav-menu .nav-item.v-list-item--active:hover *) {
-    color: white !important;
-}
-
-/* Ensure active item overlay doesn't override background */
-:deep(.nav-menu .nav-item.v-list-item--active .v-list-item__overlay) {
+:deep(.nav-menu .v-list-item.v-list-item--active .v-list-item__overlay) {
     opacity: 0 !important;
+}
+
+:deep(.nav-menu .v-list-item.v-list-item--active .v-list-item__underlay) {
+    opacity: 0 !important;
+}
+
+/* Ensure active items have white text */
+:deep(.nav-menu .v-list-item.v-list-item--active .v-list-item-title),
+:deep(.nav-menu .v-list-item.v-list-item--active .v-list-item__prepend .v-icon) {
+    color: rgb(var(--v-theme-on-primary)) !important;
+}
+
+:deep(.nav-menu .v-list-item.v-list-item--active:hover) {
+    background-color: rgb(var(--v-theme-primary)) !important;
+}
+
+:deep(.nav-menu .v-list-item.v-list-item--active:hover .v-list-item-title),
+:deep(.nav-menu .v-list-item.v-list-item--active:hover .v-list-item__prepend .v-icon) {
+    color: rgb(var(--v-theme-on-primary)) !important;
 }
 </style>
 

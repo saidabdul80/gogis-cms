@@ -87,38 +87,7 @@ class AshlabTechnologiesSeeder extends Seeder
             ['key' => 'about_objective', 'value' => 'Our primary objective is to empower businesses and individuals through innovative technology solutions. We aim to: deliver custom software applications that solve real business problems; create stunning web designs that enhance online presence and drive customer engagement; provide reliable computer repair and maintenance services to keep systems running smoothly; supply quality IT equipment at competitive prices; offer comprehensive training programs that build tech capacity in our community; and provide expert consultancy services that guide strategic technology decisions. Through these services, we strive to be the catalyst for digital transformation in Niger State and beyond.'],
 
             // About Section - Timeline
-            ['key' => 'about_timeline', 'value' => json_encode([
-                [
-                    'year' => '2020',
-                    'title' => 'Company Founded',
-                    'description' => 'Ashlab Technologies Services was officially registered under the Companies and Allied Matters Act 2020, marking the beginning of our journey to provide innovative technology solutions.'
-                ],
-                [
-                    'year' => '2021',
-                    'title' => 'Service Expansion',
-                    'description' => 'Expanded our service offerings to include comprehensive web design, software development, and IT training programs, serving over 50 clients in our first year.'
-                ],
-                [
-                    'year' => '2022',
-                    'title' => 'Training Center Launch',
-                    'description' => 'Opened our dedicated IT training center in Minna, providing hands-on technology education to students and professionals, training over 200 individuals in various IT skills.'
-                ],
-                [
-                    'year' => '2023',
-                    'title' => 'Enterprise Solutions',
-                    'description' => 'Launched enterprise-level software solutions and consultancy services, partnering with government agencies and large organizations to deliver complex IT projects.'
-                ],
-                [
-                    'year' => '2024',
-                    'title' => 'Regional Recognition',
-                    'description' => 'Achieved recognition as one of the leading technology service providers in Niger State, with a growing portfolio of successful projects and satisfied clients.'
-                ],
-                [
-                    'year' => '2025',
-                    'title' => 'Innovation & Growth',
-                    'description' => 'Continuing to innovate and expand our services, embracing emerging technologies like AI and cloud computing to deliver cutting-edge solutions to our clients.'
-                ]
-            ])],
+            ['key' => 'about_timeline', 'value' => 'Since our founding in 2020, Ashlab Technologies Services has experienced remarkable growth and transformation. We were officially registered under the Companies and Allied Matters Act 2020, marking the beginning of our journey to provide innovative technology solutions. In 2021, we expanded our service offerings to include comprehensive web design, software development, and IT training programs, successfully serving over 50 clients in our first year. By 2022, we had opened our dedicated IT training center in Minna, providing hands-on technology education to students and professionals, and training over 200 individuals in various IT skills. The year 2023 saw us launching enterprise-level software solutions and consultancy services, partnering with government agencies and large organizations to deliver complex IT projects. In 2024, we achieved recognition as one of the leading technology service providers in Niger State, with a growing portfolio of successful projects and satisfied clients. Today in 2025, we continue to innovate and expand our services, embracing emerging technologies like AI and cloud computing to deliver cutting-edge solutions to our clients.'],
         ];
 
         foreach ($settings as $setting) {

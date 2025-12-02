@@ -48,7 +48,7 @@ class SettingsSeeder extends Seeder
 
             // Contact Information
             ['key' => 'contact_email', 'value' => 'info@gogis.gov.gm.ng'],
-            ['key' => 'contact_phone', 'value' => '+234 803 456 7890'],
+            ['key' => 'contact_phone', 'value' => '+234 XXX XXX XXXX'],
             ['key' => 'address', 'value' => 'G.R.A Drive, Adjacent Treasury House Gombe, Gombe State'],
 
             // Social Media

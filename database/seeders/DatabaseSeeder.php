@@ -14,8 +14,9 @@ class DatabaseSeeder extends Seeder
         $this->call([
             RolesAndPermissionsSeeder::class,
             AdminSeeder::class,
-            SettingsSeeder::class,
-            NewsSeeder::class,
+            AshlabTechnologiesSeeder::class,
+            //SettingsSeeder::class,
+            //NewsSeeder::class,
         ]);
     }
 }
